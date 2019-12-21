@@ -1,5 +1,12 @@
 {
   "csv": {
+    "prefix": "Member_YIR_2019_0",
+    "count": 2,
+    "sample": "Sample",
+    "path": {
+      "input": "./input/",
+      "output": "./output/"
+    },
     "headers": [
       "MemberUUId",
       "FirstName",
@@ -52,7 +59,7 @@
     }
   },
   "language": {
-    "options":["English", "French", "Chinese", "Japanese"],
+    "options": ["English", "French", "Chinese", "Japanese", "Hebrew"],
     "mapping": {
       "Japan": "Japanese",
       "Traditional Chinese": "Chinese",

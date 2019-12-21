@@ -1,6 +1,6 @@
 const { createReadStream, createWriteStream } = require('fs');
 
-const config = require('./config.json');
+const config = global.config;
 const options = { fields: config.csv.headers };
 
 const transformOptions = { highWaterMark: 8192, encoding: 'utf-8' };

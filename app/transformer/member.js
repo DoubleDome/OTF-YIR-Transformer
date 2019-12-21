@@ -1,7 +1,7 @@
-const copy = require('./copy.json');
-const config = require('./config.json');
+const copy = global.copy;
+const config = global.config;
 
-class Transformer {
+class MemberTransformer {
   constructor() {
     this.setupMiddleware();
     this.setupCharacters();
@@ -244,4 +244,4 @@ class Transformer {
     return payload;
   }
 }
-module.exports = new Transformer();
+module.exports = new MemberTransformer();
