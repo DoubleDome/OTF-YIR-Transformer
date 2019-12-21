@@ -8,13 +8,14 @@ const memberTransformer = require('../transformer/member');
 const sampleTransformer = require('../transformer/sample');
 
 class Samples {
-  constructor() {
-    logger.send('Sample Job Initialize');
-  }
+  constructor() {}
 
   start(inputRoot, outputRoot) {
     logger.send('Start Sample Job...');
-    this.process({ input: `${config.csv.path.input}Samples.csv`, output: `${config.csv.path.output}Samples.csv` });
+    this.process({
+      input: `${config.csv.path.input}${config.csv.source.sample}.csv`,
+      output: `${config.csv.path.output}${config.csv.source.sample}.csv`
+    });
   }
   process(payload) {
     if (fs.existsSync(payload.input)) {
@@ -23,6 +24,8 @@ class Samples {
         this.iterate(records);
         this.export(payload.output);
       });
+    } else {
+      logger.alert(`File '${payload.input}' not found!`);
     }
   }
   import(path, complete) {
@@ -49,8 +52,8 @@ class Samples {
       } else {
         count.rejected++;
       }
-      logger.update(`Records processed: ${count.approved}`);
     });
+    logger.info(`Records processed: ${count.approved}`);
   }
 
   export(path) {

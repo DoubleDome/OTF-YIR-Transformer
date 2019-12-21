@@ -11,7 +11,7 @@ class Member {
 
   start() {
     logger.send('Start Member Job...');
-    finder.setup(config.csv.path.input, config.csv.path.output, config.csv.prefix, config.csv.count);
+    finder.setup(config.csv.path.input, config.csv.path.output, config.csv.member, config.csv.count);
     this.process(finder.get());
   }
   // CSV

@@ -1,8 +1,10 @@
 {
   "csv": {
-    "prefix": "Member_YIR_2019_0",
+    "source": {
+      "member": "Member_YIR_2019_",
+      "sample": "Samples"
+    },
     "count": 2,
-    "sample": "Sample",
     "path": {
       "input": "./input/",
       "output": "./output/"
