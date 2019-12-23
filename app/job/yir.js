@@ -3,21 +3,31 @@ const config = global.config;
 
 const fs = require('fs');
 const csv = require('../csv');
-const finder = require('../finder');
-const memberTransformer = require('../transformer/member');
 
-class Member {
-  constructor() {}
+class YIR {
+  constructor(input, output, filename, count) {
+    this.name = 'Member';
+    this.setupFinder(input, output, filename, count);
+    this.setupTransformer();
+  }
+
+  setupFinder(input, output, filename, count) {
+    this.finder = require('../finder');
+    this.finder.setup(input, output, filename, count);
+  }
+  setupTransformer() {
+    this.transformer = require('../transformer/yir');
+  }
 
   start() {
-    logger.send('Start Member Job...');
-    finder.setup(config.csv.path.input, config.csv.path.output, config.csv.member, config.csv.count);
-    this.process(finder.get());
+    logger.send(`Start ${this.name} Job...`);
+    this.process(this.finder.get());
   }
   // CSV
   // ----------------------------------------------------------------
   process(payload) {
     if (payload.input && payload.output) {
+      console.log(payload.input);
       if (fs.existsSync(payload.input)) {
         this.import(payload.input, records => {
           logger.info(`Loaded ${payload.input}...`);
@@ -42,7 +52,7 @@ class Member {
     let count = { approved: 0, rejected: 0 };
 
     records.map(record => {
-      let result = memberTransformer.process(record);
+      let result = this.transformer.process(record);
       // logger.log(result);
       if (result) {
         csv.convert(result);
@@ -56,8 +66,8 @@ class Member {
     logger.alert(`Records rejected: ${count.rejected}`);
   }
   next() {
-    if (finder.hasNext()) {
-      this.process(finder.next());
+    if (this.finder.hasNext()) {
+      this.process(this.finder.next());
     } else {
       this.closed();
     }
@@ -72,4 +82,4 @@ class Member {
   }
 }
 
-module.exports = new Member();
+module.exports = YIR;

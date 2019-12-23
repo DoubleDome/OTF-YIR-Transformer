@@ -3,9 +3,9 @@ class Finder {
   constructor() {
     this.index = 0;
   }
-  setup(input, output, prefix, count) {
+  setup(input, output, base, count) {
     this.path = { input: input, output: output };
-    this.prefix = prefix;
+    this.base = base;
     this.count = count;
   }
   get() {
@@ -20,8 +20,8 @@ class Finder {
   }
   generate() {
     return {
-      input: `${this.path.input}${this.prefix}${this.index}.csv`,
-      output: `${this.path.output}${this.prefix}${this.index}.csv`
+      input: `${this.path.input}${this.base}${this.index}.csv`,
+      output: `${this.path.output}${this.base}${this.index}.csv`
     };
   }
 }

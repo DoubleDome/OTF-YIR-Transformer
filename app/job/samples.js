@@ -4,7 +4,7 @@ const config = global.config;
 const fs = require('fs');
 
 const csv = require('../csv');
-const memberTransformer = require('../transformer/member');
+const memberTransformer = require('../transformer/yir');
 const sampleTransformer = require('../transformer/sample');
 
 class Samples {
@@ -71,4 +71,4 @@ class Samples {
   }
 }
 
-module.exports = new Samples();
+module.exports = Samples;
