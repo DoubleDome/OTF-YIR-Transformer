@@ -1,49 +1,30 @@
-const copy = global.copy;
 const config = global.config;
+let count = 0;
 
-class MemberTransformer {
+class Transformer {
   constructor() {
-    this.setupMiddleware();
-    this.setupCharacters();
-    this.setupRegEx();
+    this.middleware = [];
+  }
+
+  addMiddleware(func) {
+    this.middleware.push(this[func].bind(this));
   }
   process(payload) {
-    let result = payload;
+    let result = JSON.parse(JSON.stringify(payload));
     this.middleware.map(func => {
       result = func(result);
     });
     return result;
   }
 
-  // Middleware
-  setupMiddleware() {
-    this.middleware = [
-      // If we add this back in dont forget to add the fields to the CSV export
-      // this.calculateAverageCalories.bind(this),
-      // this.calculateAverageSplatPoints.bind(this),
-      this.remapFields.bind(this),
-      this.determinePerformanceType.bind(this),
-      this.calculateAfterburn.bind(this),
-      this.assignTotalsAndRanges.bind(this),
-      this.determineHR.bind(this),
-      this.determineChallenges.bind(this),
-      this.remapLanguages.bind(this),
-      this.sanitizeFirstName.bind(this),
-      this.appendCopy.bind(this),
-      this.applyPerformanceCopy.bind(this),
-      this.applyChallengeCopy.bind(this),
-      this.sanitizeBooleans.bind(this)
-    ];
-  }
-
-  setupCharacters() {
-    config.replacements.characters = config.replacements.characters.split('');
-  }
-
-  setupRegEx() {
-    config.replacements.patterns.map((pattern, index) => {
-      config.replacements.patterns[index] = new RegExp(pattern);
+  // CSV Functions
+  // ----------------------------------------------------------------
+  remapFields(payload) {
+    Object.keys(config.csv.mapping).map(key => {
+      payload[config.csv.mapping[key]] = payload[key];
+      delete payload[key];
     });
+    return payload;
   }
 
   // Language Override
@@ -234,14 +215,6 @@ class MemberTransformer {
     delete payload[`${field}_2`];
     return payload;
   }
-  // CSV Functions
-  // ----------------------------------------------------------------
-  remapFields(payload) {
-    Object.keys(config.csv.mapping).map(key => {
-      payload[config.csv.mapping[key]] = payload[key];
-      delete payload[key];
-    });
-    return payload;
-  }
 }
-module.exports = new MemberTransformer();
+
+module.exports = Transformer;

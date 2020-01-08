@@ -3,20 +3,40 @@ const config = global.config;
 
 const fs = require('fs');
 
+const timestamp = require('../util/timestamp');
 const csv = require('../csv');
-const memberTransformer = require('../transformer/member');
-const sampleTransformer = require('../transformer/sample');
+
+const Transformer = require('../util/transformer');
 
 class Samples {
-  constructor() {}
+  constructor() {
+    this.transformer = new Transformer();
+    this.setupMiddleware();
+  }
 
-  start(inputRoot, outputRoot) {
+  start() {
     logger.send('Start Sample Job...');
     this.process({
       input: `${config.csv.path.input}${config.csv.source.sample}.csv`,
-      output: `${config.csv.path.output}${config.csv.source.sample}.csv`
+      output: `${config.csv.path.output}${config.csv.source.sample}_${timestamp.get()}.csv`
     });
   }
+
+  // Middleware
+  setupMiddleware() {
+    this.transformer.addMiddleware('remapFields');
+    this.transformer.addMiddleware('determinePerformanceType');
+    this.transformer.addMiddleware('calculateAfterburn');
+    this.transformer.addMiddleware('assignTotalsAndRanges');
+    this.transformer.addMiddleware('determineHR');
+    this.transformer.addMiddleware('determineChallenges');
+    this.transformer.addMiddleware('remapLanguages');
+    this.transformer.addMiddleware('appendCopy');
+    this.transformer.addMiddleware('applyPerformanceCopy');
+    this.transformer.addMiddleware('applyChallengeCopy');
+    this.transformer.addMiddleware('sanitizeBooleans');
+  }
+
   process(payload) {
     if (fs.existsSync(payload.input)) {
       this.import(payload.input, records => {
@@ -28,24 +48,20 @@ class Samples {
       logger.alert(`File '${payload.input}' not found!`);
     }
   }
+
   import(path, complete) {
     csv.initialize();
     csv.import(path, records => complete(records));
     logger.notice(`Importing from ${path}...`);
   }
+
   iterate(records) {
     let count = { approved: 0, rejected: 0 };
 
-    // loop over records
-    // with a single record
-    // transform to language
-    // write
-    // next language
-
-    records = sampleTransformer.process(records);
+    records = this.duplicate(records);
 
     records.map(record => {
-      let result = memberTransformer.process(record);
+      let result = this.transformer.process(record);
       if (result) {
         csv.convert(result);
         count.approved++;
@@ -54,6 +70,17 @@ class Samples {
       }
     });
     logger.info(`Records processed: ${count.approved}`);
+  }
+
+  duplicate(records){
+    let result = [];
+    config.language.options.map(language => {
+      records.map(record => {
+        record.language = language;
+        result.push(JSON.parse(JSON.stringify(record)));
+      });
+    });
+    return result;
   }
 
   export(path) {

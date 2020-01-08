@@ -4,16 +4,38 @@ const config = global.config;
 const fs = require('fs');
 const csv = require('../csv');
 const finder = require('../finder');
-const memberTransformer = require('../transformer/member');
+
+const Transformer = require('../util/transformer');
 
 class Member {
-  constructor() {}
+  constructor() {
+    this.transformer = new Transformer();
+    this.setupMiddleware();
+  }
 
   start() {
     logger.send('Start Member Job...');
-    finder.setup(config.csv.path.input, config.csv.path.output, config.csv.member, config.csv.count);
+    finder.setup(config.csv.path.input, config.csv.path.output, config.csv.source.member, config.csv.count);
     this.process(finder.get());
   }
+
+  // Middleware
+  // ----------------------------------------------------------------
+  setupMiddleware() {
+    this.transformer.addMiddleware('remapFields');
+    this.transformer.addMiddleware('determinePerformanceType');
+    this.transformer.addMiddleware('calculateAfterburn');
+    this.transformer.addMiddleware('assignTotalsAndRanges');
+    this.transformer.addMiddleware('determineHR');
+    this.transformer.addMiddleware('determineChallenges');
+    this.transformer.addMiddleware('remapLanguages');
+    this.transformer.addMiddleware('sanitizeFirstName');
+    this.transformer.addMiddleware('appendCopy');
+    this.transformer.addMiddleware('applyPerformanceCopy');
+    this.transformer.addMiddleware('applyChallengeCopy');
+    this.transformer.addMiddleware('sanitizeBooleans');
+  }
+
   // CSV
   // ----------------------------------------------------------------
   process(payload) {
@@ -42,7 +64,7 @@ class Member {
     let count = { approved: 0, rejected: 0 };
 
     records.map(record => {
-      let result = memberTransformer.process(record);
+      let result = this.transformer.process(record);
       // logger.log(result);
       if (result) {
         csv.convert(result);

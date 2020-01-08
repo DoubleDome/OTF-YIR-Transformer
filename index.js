@@ -13,6 +13,21 @@ const mode = process.argv[2];
 class Clementine {
   constructor() {
     logger.send('Initialize');
+    this.setupCharacters();
+    this.setupRegEx();
+    this.process();
+  }
+
+  setupCharacters() {
+    global.config.replacements.characters = global.config.replacements.characters.split('');
+  }
+  setupRegEx() {
+    global.config.replacements.patterns.map((pattern, index) => {
+      global.config.replacements.patterns[index] = new RegExp(pattern);
+    });
+  }
+
+  process(){
     switch (mode) {
       case 'samples':
         samples.start();

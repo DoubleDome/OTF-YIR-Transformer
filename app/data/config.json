@@ -30,24 +30,7 @@
       "transformation",
       "marathon",
       "12_days",
-      "mayhem",
-      "1_title",
-      "2_title",
-      "3_title",
-      "4_title",
-      "5A_title",
-      "5B_title",
-      "6_title",
-      "7A_title",
-      "7B_title",
-      "8_title",
-      "9A_title",
-      "9B_title",
-      "10_title",
-      "11_title",
-      "12_title",
-      "13_title",
-      "14_title"
+      "mayhem"
     ],
     "mapping": {
       "member_uuid": "MemberUUId",
@@ -61,11 +44,11 @@
     }
   },
   "language": {
-    "options": ["English", "French", "Chinese", "Japanese", "Hebrew"],
+    "options": ["English", "French", "Arabic", "German", "Spanish", "Hebrew", "Polish", "Japanese"],
     "mapping": {
       "Japan": "Japanese",
-      "Traditional Chinese": "Chinese",
-      "Mandarin": "Chinese",
+      "Traditional Chinese": "English",
+      "Mandarin": "English",
       "French Canadian/English": "French",
       "en-AU": "English",
       "en-GB": "English"
