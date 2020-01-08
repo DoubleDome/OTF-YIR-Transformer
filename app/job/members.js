@@ -4,13 +4,14 @@ const config = global.config;
 const fs = require('fs');
 const csv = require('../csv');
 const finder = require('../finder');
+const report = require('../report');
 
 const Transformer = require('../util/transformer');
 
 class Member {
   constructor() {
     this.transformer = new Transformer();
-    this.setupMiddleware();
+    this.setupMiddleware(this.transformer);
   }
 
   start() {
@@ -21,19 +22,19 @@ class Member {
 
   // Middleware
   // ----------------------------------------------------------------
-  setupMiddleware() {
-    this.transformer.addMiddleware('remapFields');
-    this.transformer.addMiddleware('determinePerformanceType');
-    this.transformer.addMiddleware('calculateAfterburn');
-    this.transformer.addMiddleware('assignTotalsAndRanges');
-    this.transformer.addMiddleware('determineHR');
-    this.transformer.addMiddleware('determineChallenges');
-    this.transformer.addMiddleware('remapLanguages');
-    this.transformer.addMiddleware('sanitizeFirstName');
-    this.transformer.addMiddleware('appendCopy');
-    this.transformer.addMiddleware('applyPerformanceCopy');
-    this.transformer.addMiddleware('applyChallengeCopy');
-    this.transformer.addMiddleware('sanitizeBooleans');
+  setupMiddleware(target) {
+    target.addMiddleware('remapFields');
+    target.addMiddleware('determinePerformanceType');
+    target.addMiddleware('calculateAfterburn');
+    target.addMiddleware('assignTotalsAndRanges');
+    target.addMiddleware('determineHR');
+    target.addMiddleware('determineChallenges');
+    target.addMiddleware('remapLanguages');
+    target.addMiddleware('sanitizeFirstName');
+    // target.addMiddleware('appendCopy');
+    // target.addMiddleware('applyPerformanceCopy');
+    // target.addMiddleware('applyChallengeCopy');
+    target.addMiddleware('sanitizeBooleans');
   }
 
   // CSV
@@ -61,21 +62,12 @@ class Member {
   }
 
   iterate(records) {
-    let count = { approved: 0, rejected: 0 };
-
     records.map(record => {
       let result = this.transformer.process(record);
       // logger.log(result);
-      if (result) {
-        csv.convert(result);
-        count.approved++;
-      } else {
-        count.rejected++;
-      }
-      logger.update(`Records processed: ${count.approved}`);
+      csv.convert(result);
+      report.process(result);
     });
-    logger.info(`Records processed: ${count.approved}`);
-    logger.alert(`Records rejected: ${count.rejected}`);
   }
   next() {
     if (finder.hasNext()) {
@@ -90,6 +82,7 @@ class Member {
   }
 
   closed() {
+    report.output();
     logger.party(`Job Complete!`);
   }
 }

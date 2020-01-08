@@ -5,13 +5,14 @@ const fs = require('fs');
 
 const timestamp = require('../util/timestamp');
 const csv = require('../csv');
+const report = require('../report');
 
 const Transformer = require('../util/transformer');
 
 class Samples {
   constructor() {
     this.transformer = new Transformer();
-    this.setupMiddleware();
+    this.setupMiddleware(this.transformer);
   }
 
   start() {
@@ -23,18 +24,18 @@ class Samples {
   }
 
   // Middleware
-  setupMiddleware() {
-    this.transformer.addMiddleware('remapFields');
-    this.transformer.addMiddleware('determinePerformanceType');
-    this.transformer.addMiddleware('calculateAfterburn');
-    this.transformer.addMiddleware('assignTotalsAndRanges');
-    this.transformer.addMiddleware('determineHR');
-    this.transformer.addMiddleware('determineChallenges');
-    this.transformer.addMiddleware('remapLanguages');
-    this.transformer.addMiddleware('appendCopy');
-    this.transformer.addMiddleware('applyPerformanceCopy');
-    this.transformer.addMiddleware('applyChallengeCopy');
-    this.transformer.addMiddleware('sanitizeBooleans');
+  setupMiddleware(target) {
+    target.addMiddleware('remapFields');
+    target.addMiddleware('determinePerformanceType');
+    target.addMiddleware('calculateAfterburn');
+    target.addMiddleware('assignTotalsAndRanges');
+    target.addMiddleware('determineHR');
+    target.addMiddleware('determineChallenges');
+    target.addMiddleware('remapLanguages');
+    target.addMiddleware('appendCopy');
+    target.addMiddleware('applyPerformanceCopy');
+    target.addMiddleware('applyChallengeCopy');
+    target.addMiddleware('sanitizeBooleans');
   }
 
   process(payload) {
@@ -62,17 +63,13 @@ class Samples {
 
     records.map(record => {
       let result = this.transformer.process(record);
-      if (result) {
-        csv.convert(result);
-        count.approved++;
-      } else {
-        count.rejected++;
-      }
+      csv.convert(result);
+      report.process(result);
     });
-    logger.info(`Records processed: ${count.approved}`);
+    report.output();
   }
 
-  duplicate(records){
+  duplicate(records) {
     let result = [];
     config.language.options.map(language => {
       records.map(record => {

@@ -1,10 +1,10 @@
 {
   "csv": {
     "source": {
-      "member": "Member_YIR_2019_",
+      "member": "YIR_2019_",
       "sample": "Samples"
     },
-    "count": 2,
+    "count": 3,
     "path": {
       "input": "./input/",
       "output": "./output/"
@@ -49,9 +49,11 @@
       "Japan": "Japanese",
       "Traditional Chinese": "English",
       "Mandarin": "English",
+      "Chinese": "English",
       "French Canadian/English": "French",
       "en-AU": "English",
-      "en-GB": "English"
+      "en-GB": "English",
+      "":"English"
     }
   },
   "challenge": {
