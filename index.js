@@ -8,13 +8,12 @@ const samples = require('./app/job/samples');
 
 const mode = process.argv[2];
 
-
-
 class Clementine {
   constructor() {
     logger.send('Initialize');
     this.setupCharacters();
     this.setupRegEx();
+    this.setupStudios();
     this.process();
   }
 
@@ -26,8 +25,18 @@ class Clementine {
       global.config.replacements.patterns[index] = new RegExp(pattern);
     });
   }
+  setupStudios() {
+    let studioIDs;
+    Object.keys(global.config.language.studios).map(key => {
+      studioIDs = global.config.language.studios[key].split(',');
+      studioIDs.map(id => {
+        global.config.language.studios[id] = key;
+      });
+      delete global.config.language.studios[key];
+    });
+  }
 
-  process(){
+  process() {
     switch (mode) {
       case 'samples':
         samples.start();

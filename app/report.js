@@ -4,24 +4,33 @@ class Report {
   constructor() {
     this.result = {
       count: 0,
-      languages: {}
+      languages: {},
+      countries: {}
     };
   }
   process(payload) {
     this.result.count++;
     logger.update(`Records processed: ${this.result.count}`);
+
     if (this.result.languages[payload.Language]) {
       this.result.languages[payload.Language]++;
     } else {
       this.result.languages[payload.Language] = 1;
     }
+
+    if (this.result.countries[payload.Country]) {
+      this.result.countries[payload.Country]++;
+    } else {
+      this.result.countries[payload.Country] = 1;
+    }
   }
   output() {
-    logger.info(`Records processed: ${this.result.count}`);
-    Object.keys(this.result.languages).map(key => {
-      console.log(`             - ${key}: ${this.result.languages[key]}`);
-    });
-    this.result.languages.map;
+    console.log(`\nRecords processed: ${this.result.count}`);
+    console.log('\nLanguage Count:');
+    logger.outputAsList(this.result.languages);
+    console.log('\nCountry Count:');
+    logger.outputAsList(this.result.countries);
+    console.log('');
   }
 }
 

@@ -29,7 +29,9 @@ class Member {
     target.addMiddleware('assignTotalsAndRanges');
     target.addMiddleware('determineHR');
     target.addMiddleware('determineChallenges');
+    target.addMiddleware('remapCountries');
     target.addMiddleware('remapLanguages');
+    target.addMiddleware('remapStudios');
     target.addMiddleware('sanitizeFirstName');
     // target.addMiddleware('appendCopy');
     // target.addMiddleware('applyPerformanceCopy');
@@ -82,8 +84,8 @@ class Member {
   }
 
   closed() {
-    report.output();
     logger.party(`Job Complete!`);
+    report.output();
   }
 }
 

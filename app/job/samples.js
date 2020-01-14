@@ -66,7 +66,6 @@ class Samples {
       csv.convert(result);
       report.process(result);
     });
-    report.output();
   }
 
   duplicate(records) {
@@ -92,6 +91,7 @@ class Samples {
 
   closed() {
     logger.party(`Job Complete!`);
+    report.output();
   }
 }
 

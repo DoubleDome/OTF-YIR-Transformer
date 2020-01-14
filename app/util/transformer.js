@@ -27,8 +27,22 @@ class Transformer {
     return payload;
   }
 
-  // Language Override
+  // Country/Language
   // ----------------------------------------------------------------
+  remapStudios(payload) {
+    let studioID = new String(payload.home_studio_id);
+    if (config.language.studios[studioID]) {
+      payload.Language = config.language.studios[studioID];
+    }
+    return payload;
+  }
+  remapCountries(payload) {
+    payload.Country = payload.Language;
+    if (config.country.mapping[payload.Country]) {
+      payload.Country = config.country.mapping[payload.Country];
+    }
+    return payload;
+  }
   remapLanguages(payload) {
     if (config.language.mapping[payload.Language]) {
       payload.Language = config.language.mapping[payload.Language];
@@ -57,15 +71,15 @@ class Transformer {
       return 124;
     } else if (value > 124 && value <= 128) {
       return 128;
-    } else if (value > 129 && value <= 132) {
+    } else if (value > 128 && value <= 132) {
       return 132;
     } else if (value > 159 && value <= 162) {
       return 162;
-    } else if (value > 163 && value <= 166) {
+    } else if (value > 162 && value <= 166) {
       return 166;
-    } else if (value > 167 && value <= 170) {
+    } else if (value > 166 && value <= 170) {
       return 170;
-    } else if (value > 171 && value <= 174) {
+    } else if (value > 170 && value <= 174) {
       return 174;
     } else if (value > 174) {
       return 174;
@@ -89,7 +103,6 @@ class Transformer {
       return false;
     }
   }
-
   hasCompletedChallenge(payload) {
     let completed = false;
     config.challenge.headers.map(header => {
@@ -99,7 +112,6 @@ class Transformer {
     });
     return completed;
   }
-
   // Sanitize Booleans
   // ----------------------------------------------------------------
   sanitizeBooleans(payload) {

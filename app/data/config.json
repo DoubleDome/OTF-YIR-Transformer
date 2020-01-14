@@ -13,6 +13,7 @@
       "MemberUUId",
       "FirstName",
       "Language",
+      "Country",
       "TotalSplatPoints",
       "TotalSplatPoints_Range",
       "TotalCalories",
@@ -50,10 +51,29 @@
       "Traditional Chinese": "English",
       "Mandarin": "English",
       "Chinese": "English",
-      "French Canadian/English": "French",
+      "French Canadian/English": "English",
       "en-AU": "English",
       "en-GB": "English",
-      "":"English"
+      "": "English"
+    },
+    "studios": {
+      "French": "2817,2850,2798,2797,2918,2815,3140,3152,3027,3169,27593"
+    }
+  },
+  "country": {
+    "mapping": {
+      "en-AU": "Australia",
+      "en-GB": "UK",
+      "English": "US",
+      "French Canadian/English": "Canada",
+      "Traditional Chinese": "China",
+      "Spanish": "Latin America",
+      "Chinese": "China",
+      "Mandarin": "China",
+      "Hebrew": "Israel",
+      "Deutch": "Germany",
+      "Polish": "Poland",
+      "": "???"
     }
   },
   "challenge": {
