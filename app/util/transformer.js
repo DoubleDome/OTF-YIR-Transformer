@@ -195,6 +195,12 @@ class Transformer {
     payload[field] = payload[field].trim();
     return payload;
   }
+  // Sample Functions
+  // ----------------------------------------------------------------
+  prependLanguageToFirstname(payload){
+    payload.FirstName = `${payload.Language} ${payload.FirstName}`;
+    return payload;
+  }
   // Copy Functions
   // ----------------------------------------------------------------
   appendCopy(payload) {

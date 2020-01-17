@@ -49,6 +49,7 @@
     "mapping": {
       "Japan": "Japanese",
       "Traditional Chinese": "English",
+      "Deutch":"German",
       "Mandarin": "English",
       "Chinese": "English",
       "French Canadian/English": "English",
@@ -66,13 +67,16 @@
       "en-GB": "UK",
       "English": "US",
       "French Canadian/English": "Canada",
+      "French": "Canada",
       "Traditional Chinese": "China",
       "Spanish": "Latin America",
       "Chinese": "China",
       "Mandarin": "China",
       "Hebrew": "Israel",
       "Deutch": "Germany",
+      "German": "Germany",
       "Polish": "Poland",
+      "Japanese": "Japan",
       "": "???"
     }
   },

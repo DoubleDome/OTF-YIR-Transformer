@@ -31,10 +31,9 @@ class Samples {
     target.addMiddleware('assignTotalsAndRanges');
     target.addMiddleware('determineHR');
     target.addMiddleware('determineChallenges');
+    target.addMiddleware('remapCountries');
     target.addMiddleware('remapLanguages');
-    target.addMiddleware('appendCopy');
-    target.addMiddleware('applyPerformanceCopy');
-    target.addMiddleware('applyChallengeCopy');
+    target.addMiddleware('prependLanguageToFirstname');
     target.addMiddleware('sanitizeBooleans');
   }
 
