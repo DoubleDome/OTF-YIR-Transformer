@@ -197,8 +197,8 @@ class Transformer {
   }
   // Sample Functions
   // ----------------------------------------------------------------
-  prependLanguageToFirstname(payload){
-    payload.FirstName = `${payload.Language} ${payload.FirstName}`;
+  generateSampleName(payload){
+    payload.FirstName = `${payload.Language}/${payload.Country} ${payload.FirstName}`;
     return payload;
   }
   // Copy Functions

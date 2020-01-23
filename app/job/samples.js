@@ -31,9 +31,7 @@ class Samples {
     target.addMiddleware('assignTotalsAndRanges');
     target.addMiddleware('determineHR');
     target.addMiddleware('determineChallenges');
-    target.addMiddleware('remapCountries');
-    target.addMiddleware('remapLanguages');
-    target.addMiddleware('prependLanguageToFirstname');
+    target.addMiddleware('generateSampleName');
     target.addMiddleware('sanitizeBooleans');
   }
 
@@ -56,8 +54,6 @@ class Samples {
   }
 
   iterate(records) {
-    let count = { approved: 0, rejected: 0 };
-
     records = this.duplicate(records);
 
     records.map(record => {
@@ -69,9 +65,10 @@ class Samples {
 
   duplicate(records) {
     let result = [];
-    config.language.options.map(language => {
+    config.samples.map(sample => {
       records.map(record => {
-        record.language = language;
+        record.language = sample.language;
+        record.country = sample.country;
         result.push(JSON.parse(JSON.stringify(record)));
       });
     });

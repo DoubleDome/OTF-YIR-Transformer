@@ -36,6 +36,7 @@
     "mapping": {
       "member_uuid": "MemberUUId",
       "language": "Language",
+      "country": "Country",
       "first_name": "FirstName",
       "avg_hr": "AvgHR",
       "splat_points": "TotalSplatPoints",
@@ -44,12 +45,57 @@
       "total_classes": "TotalClassesTaken"
     }
   },
+  "samples": [
+    {
+      "language": "English",
+      "country": "US"
+    },
+    {
+      "language": "English",
+      "country": "Australia"
+    },
+    {
+      "language": "English",
+      "country": "UK"
+    },
+    {
+      "language": "English",
+      "country": "China"
+    },
+    {
+      "language": "French",
+      "country": "Canada"
+    },
+    {
+      "language": "Arabic",
+      "country": "Middle East"
+    },
+    {
+      "language": "German",
+      "country": "Germany"
+    },
+    {
+      "language": "Spanish",
+      "country": "Latin America"
+    },
+    {
+      "language": "Hebrew",
+      "country": "Israel"
+    },
+    {
+      "language": "Polish",
+      "country": "Poland"
+    },
+    {
+      "language": "Japanese",
+      "country": "Japan"
+    }
+  ],
   "language": {
-    "options": ["English", "French", "Arabic", "German", "Spanish", "Hebrew", "Polish", "Japanese"],
     "mapping": {
       "Japan": "Japanese",
       "Traditional Chinese": "English",
-      "Deutch":"German",
+      "Deutch": "German",
       "Mandarin": "English",
       "Chinese": "English",
       "French Canadian/English": "English",
@@ -77,6 +123,7 @@
       "German": "Germany",
       "Polish": "Poland",
       "Japanese": "Japan",
+      "Arabic": "Middle East",
       "": "???"
     }
   },
