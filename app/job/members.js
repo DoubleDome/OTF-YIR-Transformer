@@ -10,8 +10,7 @@ const Transformer = require('../util/transformer');
 
 class Member {
   constructor() {
-    this.transformer = new Transformer();
-    this.setupMiddleware(this.transformer);
+    this.transformer = this.setupMiddleware(new Transformer());
   }
 
   start() {
@@ -37,6 +36,7 @@ class Member {
     // target.addMiddleware('applyPerformanceCopy');
     // target.addMiddleware('applyChallengeCopy');
     target.addMiddleware('sanitizeBooleans');
+    return target;
   }
 
   // CSV

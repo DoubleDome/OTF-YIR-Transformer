@@ -11,8 +11,7 @@ const Transformer = require('../util/transformer');
 
 class Samples {
   constructor() {
-    this.transformer = new Transformer();
-    this.setupMiddleware(this.transformer);
+    this.transformer = this.setupMiddleware(new Transformer());
   }
 
   start() {
@@ -34,6 +33,7 @@ class Samples {
     target.addMiddleware('determineChallenges');
     target.addMiddleware('generateSampleName');
     target.addMiddleware('sanitizeBooleans');
+    return target;
   }
 
   process(payload) {

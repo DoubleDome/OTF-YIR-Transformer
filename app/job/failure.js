@@ -16,8 +16,7 @@ class Failure {
 
     csv.prepare();
 
-    this.transformer = new Transformer();
-    this.setupMiddleware(this.transformer);
+    this.transformer = this.setupMiddleware(new Transformer());
   }
 
   // Middleware
@@ -34,6 +33,7 @@ class Failure {
     target.addMiddleware('remapStudios');
     target.addMiddleware('sanitizeFirstName');
     target.addMiddleware('sanitizeBooleans');
+    return target;
   }
 
   start() {

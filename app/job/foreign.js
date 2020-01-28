@@ -10,9 +10,7 @@ const Transformer = require('../util/transformer');
 
 class Foreign {
   constructor() {
-    this.cunt = 0;
-    this.transformer = new Transformer();
-    this.setupMiddleware(this.transformer);
+    this.transformer = this.setupMiddleware(new Transformer());
   }
 
   start() {
@@ -39,6 +37,7 @@ class Foreign {
     // target.addMiddleware('applyPerformanceCopy');
     // target.addMiddleware('applyChallengeCopy');
     target.addMiddleware('sanitizeBooleans');
+    return target;
   }
 
   // CSV
@@ -67,7 +66,6 @@ class Foreign {
     records.map(record => {
       let result = this.transformer.process(record);
       if (result.Language !== 'English') {
-        this.cunt++;
         csv.convert(result);
         report.process(result);
       }
@@ -81,7 +79,6 @@ class Foreign {
     }
   }
   exit() {
-    console.log(this.cunt);
     logger.party(`Job Complete!`);
     report.output();
   }
