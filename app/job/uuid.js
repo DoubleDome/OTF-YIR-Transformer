@@ -46,7 +46,6 @@ class UUID {
   iterate(records) {
     records.map(record => {
       if (this.isMatch(record)) {
-        console.log(record.MemberUUId);
         csv.convert(record);
         report.process(record);
       }
