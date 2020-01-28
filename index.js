@@ -5,6 +5,10 @@ global.logger = require('./app/util/logger');
 
 const members = require('./app/job/members');
 const samples = require('./app/job/samples');
+const audit = require('./app/job/audit');
+const failure = require('./app/job/failure');
+const foreign = require('./app/job/foreign');
+const uuid = require('./app/job/uuid');
 
 const mode = process.argv[2];
 
@@ -41,6 +45,19 @@ class Clementine {
       case 'samples':
         samples.start();
         break;
+      case 'failure':
+        failure.start();
+        break;
+      case 'audit':
+        audit.start();
+        break;
+      case 'foreign':
+        foreign.start();
+        break;
+      case 'uuid':
+        uuid.start();
+        break;
+      case 'member':
       default:
         members.start();
         break;

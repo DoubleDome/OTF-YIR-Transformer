@@ -8,16 +8,16 @@ const report = require('../util/report');
 
 const Transformer = require('../util/transformer');
 
-class Member {
+class Failure {
   constructor() {
+    this.recordIndex = 0;
+    this.failureIndex = 0;
+    this.batches = require('../data/failed.json');
+
+    csv.prepare();
+
     this.transformer = new Transformer();
     this.setupMiddleware(this.transformer);
-  }
-
-  start() {
-    logger.send('Starting Member Job...');
-    finder.setup(config.csv.path.input, config.csv.path.output, config.csv.filenames.member, config.csv.count);
-    this.process(finder.get());
   }
 
   // Middleware
@@ -33,12 +33,14 @@ class Member {
     target.addMiddleware('remapLanguages');
     target.addMiddleware('remapStudios');
     target.addMiddleware('sanitizeFirstName');
-    // target.addMiddleware('appendCopy');
-    // target.addMiddleware('applyPerformanceCopy');
-    // target.addMiddleware('applyChallengeCopy');
     target.addMiddleware('sanitizeBooleans');
   }
 
+  start() {
+    logger.send('Starting Failure Job...');
+    finder.setup(config.csv.path.input, config.csv.path.output, config.csv.filenames.member, config.csv.count);
+    this.process(finder.get());
+  }
   // CSV
   // ----------------------------------------------------------------
   process(payload) {
@@ -47,16 +49,17 @@ class Member {
         this.import(payload.input, records => {
           logger.info(`Loaded ${payload.input}...`);
           this.iterate(records);
-          this.export(payload.output);
+          this.next();
         });
       }
     }
   }
   import(path, done) {
-    csv.prepare();
+    this.reset();
     csv.import(path, records => done(records));
     logger.notice(`Importing from ${path}...`);
   }
+
   export(path) {
     logger.notice(`Exporting to ${path} ...`);
     csv.export(path, this.onExportComplete.bind(this));
@@ -64,29 +67,46 @@ class Member {
 
   iterate(records) {
     records.map(record => {
-      let result = this.transformer.process(record);
-      // logger.log(result);
-      csv.convert(result);
-      report.process(result);
+      this.recordIndex++;
+      if (this.isMatch(finder.index, this.recordIndex)) {
+        let result = this.transformer.process(record);
+        csv.convert(result);
+        report.process(result);
+      }
     });
   }
   next() {
     if (finder.hasNext()) {
       this.process(finder.next());
     } else {
-      this.exit();
+      this.export(`${config.csv.path.output}${config.csv.filenames.errors}.csv`);
     }
   }
+
   exit() {
     logger.party(`Job Complete!`);
     report.output();
   }
+
+  // Trash
+  // ----------------------------------------------------------------
+
+  isMatch(batch, index) {
+    let result = index === Number(this.batches[batch][this.failureIndex]);
+    if (result) this.failureIndex++;
+    return result;
+  }
+  reset() {
+    this.recordIndex = 0;
+    this.failureIndex = 0;
+  }
+  
   // Event Handlers
   // ----------------------------------------------------------------
   onExportComplete() {
     logger.success(`Export Complete!`);
-    this.next();
+    this.exit();
   }
 }
 
-module.exports = new Member();
+module.exports = new Failure();

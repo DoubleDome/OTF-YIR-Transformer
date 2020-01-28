@@ -1,8 +1,12 @@
 {
   "csv": {
-    "source": {
+    "filenames": {
       "member": "YIR_2019_",
-      "sample": "Samples"
+      "audit": "PURL_YIR_2019_",
+      "errors": "YIR_2019_Failures",
+      "foreign": "YIR_2019_Foreign",
+      "sample": "Samples",
+      "UUID": "YIR_2019_Foreign_Samples"
     },
     "count": 3,
     "path": {

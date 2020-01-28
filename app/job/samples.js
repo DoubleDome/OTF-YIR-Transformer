@@ -4,8 +4,8 @@ const config = global.config;
 const fs = require('fs');
 
 const timestamp = require('../util/timestamp');
-const csv = require('../csv');
-const report = require('../report');
+const csv = require('../util/csv');
+const report = require('../util/report');
 
 const Transformer = require('../util/transformer');
 
@@ -16,10 +16,11 @@ class Samples {
   }
 
   start() {
-    logger.send('Start Sample Job...');
+    csv.prepare();
+    logger.send('Starting Sample Job...');
     this.process({
-      input: `${config.csv.path.input}${config.csv.source.sample}.csv`,
-      output: `${config.csv.path.output}${config.csv.source.sample}_${timestamp.get()}.csv`
+      input: `${config.csv.path.input}${config.csv.filenames.sample}.csv`,
+      output: `${config.csv.path.output}${config.csv.filenames.sample}_${timestamp.get()}.csv`
     });
   }
 
@@ -47,9 +48,8 @@ class Samples {
     }
   }
 
-  import(path, complete) {
-    csv.initialize();
-    csv.import(path, records => complete(records));
+  import(path, done) {
+    csv.import(path, records => done(records));
     logger.notice(`Importing from ${path}...`);
   }
 
@@ -77,17 +77,19 @@ class Samples {
 
   export(path) {
     logger.notice(`Exporting to ${path} ...`);
-    csv.close();
-    csv.export(path, this.complete.bind(this));
-  }
-  complete() {
-    logger.success(`Export Complete!`);
-    this.closed();
+    csv.export(path, this.onExportComplete.bind(this));
   }
 
-  closed() {
+  exit() {
     logger.party(`Job Complete!`);
     report.output();
+  }
+
+  // Event Handlers
+  // ----------------------------------------------------------------
+  onExportComplete() {
+    logger.success(`Export Complete!`);
+    this.exit();
   }
 }
 

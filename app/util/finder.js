@@ -9,7 +9,10 @@ class Finder {
     this.count = count;
   }
   get() {
-    return this.generate();
+    return {
+      input: `${this.path.input}${this.prefix}${this.index}.csv`,
+      output: `${this.path.output}${this.prefix}${this.index}.csv`
+    };
   }
   next() {
     this.index++;
@@ -17,12 +20,6 @@ class Finder {
   }
   hasNext() {
     return (this.index + 1) < this.count;
-  }
-  generate() {
-    return {
-      input: `${this.path.input}${this.prefix}${this.index}.csv`,
-      output: `${this.path.output}${this.prefix}${this.index}.csv`
-    };
   }
 }
 

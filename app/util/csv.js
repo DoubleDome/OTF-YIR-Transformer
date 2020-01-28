@@ -9,17 +9,14 @@ const { AsyncParser } = require('json2csv');
 class CSV {
   constructor() {}
 
-  initialize() {
+  prepare() {
     this.jsonParser = new AsyncParser(options, transformOptions);
-    this.csvParser = require('csvtojson');
   }
   convert(payload) {
     this.jsonParser.input.push(JSON.stringify(payload));
   }
-  close() {
-    this.jsonParser.input.push(null);
-  }
   import(path, done) {
+    this.csvParser = require('csvtojson');
     if (path !== undefined && done !== undefined) {
       this.csvParser()
         .fromFile(path)
@@ -33,6 +30,7 @@ class CSV {
   }
 
   export(path, complete) {
+    this.jsonParser.input.push(null);
     if (path !== undefined) {
       let output = createWriteStream(path, { encoding: 'utf8' });
       this.jsonParser
@@ -44,7 +42,6 @@ class CSV {
       throw new Error('Missing parameter!');
     }
   }
-  
 }
 
 module.exports = new CSV();
