@@ -67,7 +67,6 @@ class UUID {
 
   // Trash
   // ----------------------------------------------------------------
-
   isMatch(record) {
     let result = false;
     this.filteredIds.map(id => {
@@ -75,6 +74,7 @@ class UUID {
     });
     return result;
   }
+
   // Event Handlers
   // ----------------------------------------------------------------
   onExportComplete() {
