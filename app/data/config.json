@@ -5,8 +5,10 @@
       "audit": "PURL_YIR_2019_",
       "errors": "YIR_2019_Failures",
       "foreign": "YIR_2019_Foreign",
+      "german": "YIR_2019_German",
       "sample": "Samples",
-      "UUID": "YIR_2019_Foreign_Samples"
+      "UUID": "YIR_2019_Foreign_Samples",
+      "AvgHR": "YIR_2019_AvgHR_159"
     },
     "count": 3,
     "path": {
@@ -176,7 +178,9 @@
       "SEE FRONT DESK",
       "See front desk",
       "see front desk",
+      "See Front Desk",
       "Ross_The_Boss",
+      "VISIT DESK",
       "PHOTO",
       "please see front desk",
       "NEED PIC",

@@ -54,6 +54,7 @@ class Failure {
       }
     }
   }
+  
   import(path, done) {
     this.reset();
     csv.import(path, records => done(records));
@@ -75,6 +76,7 @@ class Failure {
       }
     });
   }
+
   next() {
     if (finder.hasNext()) {
       this.process(finder.next());
@@ -107,6 +109,7 @@ class Failure {
     logger.success(`Export Complete!`);
     this.exit();
   }
+  
 }
 
 module.exports = new Failure();

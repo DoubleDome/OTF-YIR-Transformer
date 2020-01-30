@@ -6,7 +6,7 @@ const csv = require('../util/csv');
 const finder = require('../util/finder');
 const report = require('../util/report');
 
-class Audit {
+class Job {
   constructor() {}
 
   start() {
@@ -28,6 +28,7 @@ class Audit {
       }
     }
   }
+
   import(path, done) {
     csv.import(path, records => done(records));
     logger.notice(`Importing from ${path}...`);
@@ -38,6 +39,7 @@ class Audit {
       report.process(record);
     });
   }
+  
   next() {
     if (finder.hasNext()) {
       this.process(finder.next());
@@ -50,6 +52,7 @@ class Audit {
     logger.party(`Job Complete!`);
     report.output();
   }
+
 }
 
-module.exports = new Audit();
+module.exports = new Job();

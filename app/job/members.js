@@ -52,11 +52,13 @@ class Member {
       }
     }
   }
+
   import(path, done) {
     csv.prepare();
     csv.import(path, records => done(records));
     logger.notice(`Importing from ${path}...`);
   }
+
   export(path) {
     logger.notice(`Exporting to ${path} ...`);
     csv.export(path, this.onExportComplete.bind(this));
@@ -70,6 +72,7 @@ class Member {
       report.process(result);
     });
   }
+
   next() {
     if (finder.hasNext()) {
       this.process(finder.next());
@@ -77,16 +80,19 @@ class Member {
       this.exit();
     }
   }
+
   exit() {
     logger.party(`Job Complete!`);
     report.output();
   }
+  
   // Event Handlers
   // ----------------------------------------------------------------
   onExportComplete() {
     logger.success(`Export Complete!`);
     this.next();
   }
+
 }
 
 module.exports = new Member();

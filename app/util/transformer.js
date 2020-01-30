@@ -73,7 +73,7 @@ class Transformer {
       return 128;
     } else if (value > 128 && value <= 132) {
       return 132;
-    } else if (value > 159 && value <= 162) {
+    } else if (value >= 159 && value <= 162) {
       return 162;
     } else if (value > 162 && value <= 166) {
       return 166;

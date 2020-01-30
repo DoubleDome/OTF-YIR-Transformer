@@ -55,7 +55,6 @@ class Samples {
 
   iterate(records) {
     records = this.duplicate(records);
-
     records.map(record => {
       let result = this.transformer.process(record);
       csv.convert(result);
@@ -91,6 +90,7 @@ class Samples {
     logger.success(`Export Complete!`);
     this.exit();
   }
+  
 }
 
 module.exports = new Samples();

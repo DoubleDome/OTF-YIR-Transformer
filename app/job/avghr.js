@@ -8,14 +8,14 @@ const report = require('../util/report');
 
 const Transformer = require('../util/transformer');
 
-class Foreign {
+class Job {
   constructor() {
     this.transformer = this.setupMiddleware(new Transformer());
   }
 
   start() {
     csv.prepare();
-    logger.send('Starting Foreign Job...');
+    logger.send('Starting AvgHR Job...');
     finder.setup(config.csv.path.input, config.csv.path.output, config.csv.filenames.member, config.csv.count);
     this.process(finder.get());
   }
@@ -66,8 +66,11 @@ class Foreign {
 
   iterate(records) {
     records.map(record => {
-      let result = this.transformer.process(record);
-      if (result.Language !== 'English') {
+      if (Number(record.avg_hr) === 159) {
+        let result = this.transformer.process(record);
+        if (result.Language === 'English') {
+          result = this.transformer.sanitizeFirstName(result);
+        }
         csv.convert(result);
         report.process(result);
       }
@@ -78,7 +81,7 @@ class Foreign {
     if (finder.hasNext()) {
       this.process(finder.next());
     } else {
-      this.export(`${config.csv.path.output}${config.csv.filenames.foreign}.csv`);
+      this.export(`${config.csv.path.output}${config.csv.filenames.AvgHR}.csv`);
     }
   }
 
@@ -93,7 +96,6 @@ class Foreign {
     logger.success(`Export Complete!`);
     this.exit();
   }
-  
 }
 
-module.exports = new Foreign();
+module.exports = new Job();

@@ -3,24 +3,39 @@ const config = global.config;
 
 const fs = require('fs');
 const csv = require('../util/csv');
+const finder = require('../util/finder');
 const report = require('../util/report');
 
-class UUID {
+const Transformer = require('../util/transformer');
+
+class Foreign {
   constructor() {
-    this.filteredIds = require('../data/uuid.json');
-    csv.prepare();
+    this.transformer = this.setupMiddleware(new Transformer());
   }
 
-  // Start Job
-  // ----------------------------------------------------------------
   start() {
-    logger.send('Starting UUID Job...');
-    this.process({
-      input: `${config.csv.path.output}${config.csv.filenames.foreign}.csv`,
-      output: `${config.csv.path.output}${config.csv.filenames.UUID}.csv`
-    });
+    csv.prepare();
+    logger.send('Starting Foreign Job...');
+    finder.setup(config.csv.path.input, config.csv.path.output, config.csv.filenames.member, config.csv.count);
+    this.process(finder.get());
   }
-  
+
+  // Middleware
+  // ----------------------------------------------------------------
+  setupMiddleware(target) {
+    target.addMiddleware('remapFields');
+    target.addMiddleware('determinePerformanceType');
+    target.addMiddleware('calculateAfterburn');
+    target.addMiddleware('assignTotalsAndRanges');
+    target.addMiddleware('determineHR');
+    target.addMiddleware('determineChallenges');
+    target.addMiddleware('remapCountries');
+    target.addMiddleware('remapLanguages');
+    target.addMiddleware('remapStudios');
+    target.addMiddleware('sanitizeBooleans');
+    return target;
+  }
+
   // CSV
   // ----------------------------------------------------------------
   process(payload) {
@@ -29,11 +44,12 @@ class UUID {
         this.import(payload.input, records => {
           logger.info(`Loaded ${payload.input}...`);
           this.iterate(records);
-          this.export(payload.output);
+          this.next();
         });
       }
     }
   }
+
   import(path, done) {
     csv.import(path, records => done(records));
     logger.notice(`Importing from ${path}...`);
@@ -46,9 +62,10 @@ class UUID {
 
   iterate(records) {
     records.map(record => {
-      if (this.isMatch(record)) {
-        csv.convert(record);
-        report.process(record);
+      let result = this.transformer.process(record);
+      if (result.Language === 'German') {
+        csv.convert(result);
+        report.process(result);
       }
     });
   }
@@ -57,23 +74,13 @@ class UUID {
     if (finder.hasNext()) {
       this.process(finder.next());
     } else {
-      this.export(`${config.csv.path.output}${config.csv.filenames.errors}.csv`);
+      this.export(`${config.csv.path.output}${config.csv.filenames.german}.csv`);
     }
   }
 
   exit() {
     logger.party(`Job Complete!`);
     report.output();
-  }
-
-  // Trash
-  // ----------------------------------------------------------------
-  isMatch(record) {
-    let result = false;
-    this.filteredIds.map(id => {
-      if (record.MemberUUId === id) result = true;
-    });
-    return result;
   }
 
   // Event Handlers
@@ -85,4 +92,4 @@ class UUID {
   
 }
 
-module.exports = new UUID();
+module.exports = new Foreign();
