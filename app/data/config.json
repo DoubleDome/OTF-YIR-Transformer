@@ -5,7 +5,6 @@
       "audit": "PURL_YIR_2019_",
       "errors": "YIR_2019_Failures",
       "foreign": "YIR_2019_Foreign",
-      "german": "YIR_2019_German",
       "sample": "Samples",
       "UUID": "YIR_2019_Foreign_Samples",
       "AvgHR": "YIR_2019_AvgHR_159"
@@ -130,7 +129,7 @@
       "Polish": "Poland",
       "Japanese": "Japan",
       "Arabic": "Middle East",
-      "": "???"
+      "": "India"
     }
   },
   "challenge": {

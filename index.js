@@ -8,11 +8,12 @@ const samples = require('./app/job/samples');
 const audit = require('./app/job/audit');
 const failure = require('./app/job/failure');
 const foreign = require('./app/job/foreign');
-const german = require('./app/job/german');
+const language = require('./app/job/language');
 const uuid = require('./app/job/uuid');
 const avghr = require('./app/job/avghr');
 
 const mode = process.argv[2];
+const languageFilter = process.argv[3];
 
 class Clementine {
   constructor() {
@@ -47,8 +48,12 @@ class Clementine {
       case 'samples':
         samples.start();
         break;
-      case 'german':
-        german.start();
+      case 'language':
+        if (!languageFilter) {
+          throw new Error('Missing language parameter!');
+        } else {
+          language.start(languageFilter);
+        }
         break;
       case 'failure':
         failure.start();
