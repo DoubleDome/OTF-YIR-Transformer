@@ -11,14 +11,14 @@ class Job {
 
   start() {
     logger.send('Starting Audit Job...');
-    finder.setup(config.csv.path.output, config.csv.path.output, config.csv.filenames.audit, config.csv.count);
+    finder.setup(config.csv.path.final, config.csv.path.final, config.csv.filenames.audit, config.csv.count);
     this.process(finder.get());
   }
 
   // CSV
   // ----------------------------------------------------------------
   process(payload) {
-    if (payload.input && payload.output) {
+    if (payload.input) {
       if (fs.existsSync(payload.input)) {
         this.import(payload.input, records => {
           logger.info(`Loaded ${payload.input}...`);

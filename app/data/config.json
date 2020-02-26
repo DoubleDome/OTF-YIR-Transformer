@@ -12,7 +12,8 @@
     "count": 3,
     "path": {
       "input": "./input/",
-      "output": "./output/"
+      "output": "./output/",
+      "final":"./final/"
     },
     "headers": [
       "MemberUUId",
